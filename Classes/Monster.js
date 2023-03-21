@@ -1,7 +1,7 @@
-class Monster extends (CollisionBlock) {
+class Monster extends (Player) {
     constructor (position, size, color, context, hitbox_size, hurtbox_size, gravitatory_pull) {
-        super(position, size, color, context, hitbox_size, hurtbox_size);
-        this.gravitatory_pull = gravitatory_pull;
+        super(position, size, color, context, hitbox_size, hurtbox_size, gravitatory_pull);
     }
+    
 
 }

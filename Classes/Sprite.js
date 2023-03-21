@@ -7,16 +7,10 @@ class Sprite {
         this.context = context;
         this.position = position;
         this.size = size;
-        this.color = color;
-    }
+        this.color = color;}
     update () {
-        this.draw();
-    }
+        this.draw();}
     draw () {
         this.context.fillStyle = this.color;
-        this.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
-    }
-
-
-
-    }
+        this.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);}
+}
