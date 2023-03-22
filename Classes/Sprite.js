@@ -1,6 +1,6 @@
 class Sprite {
     //position = {x: int_value, y: int_value}//
-    //size = {width: int_value, y: int_value}//
+    //size = {width: int_value, height: int_value}//
     //hitbox_size = {width: int_value, height: int_value}
     //velocity = {x: int_value, y: int_value}
     constructor (position, size, color, context) {
