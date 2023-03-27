@@ -38,9 +38,14 @@ class KeyboardController {
             this.last_key = 'sin valor'})}
     applyController() {
         if (this.keys.p.pressed === true && this.keys.o.pressed ===true) {this.player.velocity.x = 0;}
-        else if (this.keys.p.pressed === true) {this.player.velocity.x = 5;}
-        else if (this.keys.o.pressed === true) {this.player.velocity.x = -5;}
-        else if (this.keys.p.pressed === false && this.keys.o.pressed ===false) {this.player.velocity.x = 0;}
+        else if (this.keys.p.pressed === true) {
+            this.player.facing = 'right';
+            this.player.velocity.x = 5;}
+        else if (this.keys.o.pressed === true) {
+            this.player.facing = 'left';
+            this.player.velocity.x = -5;}
+        else if (this.keys.p.pressed === false && this.keys.o.pressed ===false) {
+            this.player.velocity.x = 0;}
         if (this.keys.space.pressed === true) {this.keys.space.pressed = false;
             if (this.jump_lock_1 === false && this.jump_lock_2 === false) {
                 this.player.velocity.y =-10;
