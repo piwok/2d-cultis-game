@@ -5,9 +5,10 @@ const collision_blocks_map_1 = [];
 let canvas = document.getElementById('root');
 let context_2D = canvas.getContext('2d');
  
-const player = new Player({x: 350, y: 0}, {width: 50, height: 150},'red', context_2D, {width: 50, height: 150}, {}, 0.45);
+const player = new Player({x: 350, y: 0}, {width: 50, height: 150},'red', context_2D, {width: 50, height: 150}, {},
+                    {width: 150, height: 40, duration: 1000, damage: 1}, 0.45);
 const controller = new KeyboardController(player);
-const cultist = new Monster ({x: 1000, y: 0}, {width: 50, height: 150},'purple', context_2D, {width: 50, height: 150}, {}, 0.05);
+const cultist = new Monster ({x: 1000, y: 0}, {width: 50, height: 150},'purple', context_2D, {width: 50, height: 150}, {}, {}, 0.05);
 for (let i = 0; i < 30; i++) {
     collision_blocks_map_1.push(new CollisionBlock({x: 25*i, y: 800}, {width: 25, height: 25}, 'green', context_2D, {},{}))}
 for (let i = 31; i <= 55;i++) {
@@ -16,6 +17,13 @@ for (let i = 20; i <= 30;i++) {
     collision_blocks_map_1.push(new CollisionBlock({x: 1400, y: 25*i}, {width: 25, height: 25}, 'yellow', context_2D, {},{}))}
 for (let i = 20; i <= 31;i++) {
     collision_blocks_map_1.push(new CollisionBlock({x: 400, y: 25*i}, {width: 25, height: 25}, 'orange', context_2D, {},{}))}
+for (let i = 20; i <= 31;i++) {
+    collision_blocks_map_1.push(new CollisionBlock({x: 25*i, y: 300}, {width: 25, height: 25}, 'red', context_2D, {},{}))}
+for (let i = 20; i <= 31;i++) {
+    collision_blocks_map_1.push(new CollisionBlock({x: 25*i, y: 600}, {width: 25, height: 25}, 'red', context_2D, {},{}))}
+for (let i = 37; i <= 41;i++) {
+    collision_blocks_map_1.push(new CollisionBlock({x: 25*i, y: 450}, {width: 25, height: 25}, 'red', context_2D, {},{}))}
+
 player.getCollisionBlocks(collision_blocks_map_1);
 cultist.getCollisionBlocks(collision_blocks_map_1);
 elements.push(player);
