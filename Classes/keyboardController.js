@@ -10,7 +10,7 @@ class KeyboardController {
             q: {pressed: false},
             a: {pressed: false},
             space: {pressed: false},
-            bracket_left: {pressed: false}
+            w: {pressed: false}
         }
         document.addEventListener('keydown', (event) => {
             
@@ -29,7 +29,7 @@ class KeyboardController {
                 this.keys.space.pressed = true}
             else if (event.key === 'w' && this.last_key != 'w') {
                 this.last_key = 'w';
-                this.keys.bracket_left.pressed = true}
+                this.keys.w.pressed = true}
             })
         document.addEventListener('keyup', (event) => {
             if (event.key === 'o') {
@@ -43,7 +43,7 @@ class KeyboardController {
             else if (event.key === ' ') {
                 this.keys.space.pressed = false}
             else if (event.key === 'w') {
-                this.keys.bracket_left.pressed = false}
+                this.keys.w.pressed = false}
             this.last_key = 'sin valor'})}
             
     applyController() {
@@ -67,11 +67,11 @@ class KeyboardController {
         if (this.player.velocity.y === 0) {
             this.jump_lock_1 = false;
             this.jump_lock_2 = false;}
-        if (this.keys.bracket_left.pressed === true) {
-            console.log('weee')
-            this.keys.bracket_left.pressed = false;
+        if (this.keys.w.pressed === true) {
+            this.keys.w.pressed = false;
             this.player.context.fillStyle = 'black';
-            this.player.context.fillRect(this.player.position.x + this.player.size.width, this.player.position.y, this.player.attackbox_size.width, this.player.attackbox_size.height);
+            this.player.attackbox.attack = true;
+            setTimeout (() => {this.player.attackbox.attack = false},this.player.attackbox.duration)
             }
     }
 }
