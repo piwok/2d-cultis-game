@@ -3,6 +3,8 @@ class KeyboardController {
         this.player = player;
         this.jump_lock_1 = false;
         this.jump_lock_2 = false;
+        this.right_attack_lock = false;
+        this.left_attack_lock = false;
         this.last_key = 'start value';
         this.keys = {
             o: {pressed: false},
@@ -69,9 +71,11 @@ class KeyboardController {
             this.jump_lock_2 = false;}
         if (this.keys.w.pressed === true) {
             this.keys.w.pressed = false;
-            this.player.context.fillStyle = 'black';
             this.player.attackbox.attack = true;
-            setTimeout (() => {this.player.attackbox.attack = false},this.player.attackbox.duration)
-            }
+            if (this.player.right_attack_lock === false && this.player.left_attack_lock === false) {
+                setTimeout (() => {this.player.attackbox.attack = false;
+                                this.player.right_attack_lock = false;
+                                this.player.left_attack_lock = false},this.player.attackbox.duration)}
+        }
     }
 }
