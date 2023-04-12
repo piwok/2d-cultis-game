@@ -5,7 +5,9 @@ class Player extends(CollisionBlock) {
         this.camerabox = {width:400, height: 400}
         this.gravity = true;
         this.gravitatory_pull = gravitatory_pull;
+        this.background = false;
         this.collision_blocks = [];
+        this.monsters = [];
         this.right_attack_lock = false;
         this.left_attack_lock = false;
         this.weapon = 'start value';
@@ -15,7 +17,7 @@ class Player extends(CollisionBlock) {
     draw () {
         this.context.fillStyle = this.size.color;
         this.context.fillRect(this.position.x, this.position.y, this.size.width, this.size.height)
-        this.context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        this.context.fillStyle = 'rgba(0, 0, 0, 0.0)';
         this.context.fillRect(this.position.x - this.camerabox.width/2 + this.size.width/2, this.position.y - this.camerabox.height/2 + this.size.height/2, this.camerabox.width, this.camerabox.height)
         if (this.attackbox.attack === true) {
             this.context.fillStyle = this.attackbox.color;
@@ -29,10 +31,15 @@ class Player extends(CollisionBlock) {
     }
         
     update () {
+        
         this.applyVelocityX();
-        if (this.velocity.x > 0) {this.detectRightCollision();}
-        else if (this.velocity.x < 0) {this.detectLeftCollision();}
-        // this.detectCanvasBorderHorizontalCollision();
+        if (this.velocity.x > 0) {
+            this.detectRightCollision();
+            this.detectCanvasBorderHorizontalCollision()}
+        else if (this.velocity.x < 0) {
+            this.detectLeftCollision();
+            this.detectCanvasBorderHorizontalCollision()
+        }
         this.applyVelocityY();
         this.detectTopCollision();
         this.detectBottonCollision();
@@ -47,36 +54,69 @@ class Player extends(CollisionBlock) {
             this.velocity.y += this.gravitatory_pull}
         this.position.y += this.velocity.y;}
 
+    getBackground (backgroud) {
+        this.background = backgroud;
+    }
+    
     getCollisionBlocks (collision_blocks) {
         this.collision_blocks = collision_blocks;}
     
-    // detectCanvasBorderHorizontalCollision () {
-    //     if (this.position.x + this.camerabox.widt/2 - this.size.width/2 >= 1600) {
-    //         this.position.x = 
-
-    //     }
+    getMonsters (monsters) {
+        this.monsters = monsters;
+    }
+    
+    detectCanvasBorderHorizontalCollision () {
+        console.log(this.position.x + this.size.width)
+        if (this.velocity.x > 0) {
+            if (this.position.x + this.camerabox.width/2 + this.size.width/2 + this.velocity.x >= 1600 && this.background.position.x < 4800) {
+                this.position.x = 1600 - this.camerabox.width/2 - this.size.width/2 - 0.01
+                this.collision_blocks.forEach((block) => {
+                    block.position.x -= + this.velocity.x;
+                })
+                this.monsters.forEach((monster) => {
+                    monster.position.x -= + this.velocity.x;
+                })
+                this.background.position.x -= - this.velocity.x;
+            }
+            else if (this.position.x + this.size.width >= 1600) {
+                this.position.x = 1600 - this.size.width - 0.01;
+            }
+        }
+        else if (this.velocity.x < 0) {
+            if (this.position.x + this.velocity.x + this.size.width/2 - this.camerabox.width/2 <= 0 && this.background.position.x > 0) {
+                this.position.x = this.camerabox.width/2 - this.size.width/2 + 0.01;
+                this.collision_blocks.forEach((block) => {
+                    block.position.x += - this.velocity.x;
+                })
+                this.monsters.forEach((monster) => {
+                    monster.position.x += - this.velocity.x;
+                })
+                this.background.position.x += + this.velocity.x;
+            }
+            else if (this.position.x <= 0) {
+                this.position.x = 0.01
+            }
+        }
+    }
     
 
     detectRightCollision() {}
 
     detectLeftCollision() {}
 
-    detectBottonCollision () {}
-        
-    detectTopCollision () {
-        for (const [key, value] of Object.entries(this.map)) {
-            if (value != 0) {
-                
-                if (this.position.y + this.size.height >= value.position.y &&
-                    this.position.y + this.size.height <= value.position.y + value.size.height &&
-                    this.position.x + this.size.width >= value.position.x &&
-                    this.position.x <= value.position.x + value.size.width) {
-                    this.velocity.y = 0;
-                    this.position.y = value.position.y - this.size.height - 0.01;
-                }
+    detectBottonCollision () {
+        this.collision_blocks.forEach((block) => {
+            if (this.position.y + this.size.height + this.velocity.y >= block.position.y &&
+                this.position.y + this.size.height <= block.position.y + block.size.height &&
+                this.position.x + this.size.width >= block.position.x &&
+                this.position.x <= block.position.x + block.size.width) {
+                    this.velocity.y = 0
+                    this.position.y = block.position.y - this.size.height
             }
-        }
+        })
     }
+        
+    detectTopCollision () {}
 
     setGravity (new_mode) {
         this.gravity = new_mode;}
