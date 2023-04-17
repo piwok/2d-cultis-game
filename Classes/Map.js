@@ -5,6 +5,7 @@ class Map extends (Sprite) {
         this.img.src = image_src;
         this.width_blocks = width_blocks;
         this.height_blocks = height_blocks;
+        
         }
     
     update () {
@@ -15,8 +16,8 @@ class Map extends (Sprite) {
 
     draw () {
         this.context.save()
-        this.context.translate(-this.position.x, - 3*this.img.height/4)
-        this.context.drawImage(this.img, 0, 0)
+        
+        this.context.drawImage(this.img, this.position.x, this.position.y)
         this.context.restore()
     }
 }

@@ -6,13 +6,15 @@ class KeyboardController {
         this.right_attack_lock = false;
         this.left_attack_lock = false;
         this.last_key = 'start value';
+        this.timeout_control = {investigate: false, attack: false}
         this.keys = {
             o: {pressed: false},
             p: {pressed: false},
             q: {pressed: false},
             a: {pressed: false},
             space: {pressed: false},
-            w: {pressed: false}
+            w: {pressed: false},
+            i: {pressed: false}
         }
         document.addEventListener('keydown', (event) => {
             
@@ -32,6 +34,9 @@ class KeyboardController {
             else if (event.key === 'w' && this.last_key != 'w') {
                 this.last_key = 'w';
                 this.keys.w.pressed = true}
+            else if (event.key === 'i' && this.last_key != 'i') {
+                this.last_key = 'i';
+                this.keys.i.pressed = true}
             })
         document.addEventListener('keyup', (event) => {
             if (event.key === 'o') {
@@ -46,6 +51,8 @@ class KeyboardController {
                 this.keys.space.pressed = false}
             else if (event.key === 'w') {
                 this.keys.w.pressed = false}
+            else if (event.key === 'i') {
+                this.keys.i.pressed = false}
             this.last_key = 'sin valor'})}
             
     applyController() {
@@ -61,16 +68,27 @@ class KeyboardController {
 
         if (this.keys.space.pressed === true) {this.keys.space.pressed = false;
             if (this.jump_lock_1 === false && this.jump_lock_2 === false) {
-                this.player.velocity.y =-10;
+                this.player.velocity.y =-13;
                 this.jump_lock_1 = true;}
             else if (this.jump_lock_1 === true && this.jump_lock_2 === false) {
-                this.player.velocity.y = -10;
+                this.player.velocity.y = -13;
                 this.jump_lock_2 = true;}}   
         if (this.player.velocity.y === 0) {
             this.jump_lock_1 = false;
             this.jump_lock_2 = false;}
         if (this.keys.w.pressed === true) {
             this.keys.w.pressed = false;
+            this.player.attackbox.attack = true;
+            if (this.player.right_attack_lock === false && this.player.left_attack_lock === false) {
+                setTimeout (() => {this.player.attackbox.attack = false;
+                                this.player.right_attack_lock = false;
+                                this.player.left_attack_lock = false},this.player.attackbox.duration)}
+        }
+        if (this.keys.i.pressed === true && this.timeout_control.investigate === false) {
+            this.timeout_control.investigate = setTimeout (() => {
+                
+            })
+            
             this.player.attackbox.attack = true;
             if (this.player.right_attack_lock === false && this.player.left_attack_lock === false) {
                 setTimeout (() => {this.player.attackbox.attack = false;
