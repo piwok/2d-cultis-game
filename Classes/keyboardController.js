@@ -83,17 +83,29 @@ class KeyboardController {
                 setTimeout (() => {this.player.attackbox.attack = false;
                                 this.player.right_attack_lock = false;
                                 this.player.left_attack_lock = false},this.player.attackbox.duration)}
-        }
-        if (this.keys.i.pressed === true && this.timeout_control.investigate === false) {
-            this.timeout_control.investigate = setTimeout (() => {
-                
-            })
+        
+        
             
             this.player.attackbox.attack = true;
             if (this.player.right_attack_lock === false && this.player.left_attack_lock === false) {
                 setTimeout (() => {this.player.attackbox.attack = false;
                                 this.player.right_attack_lock = false;
                                 this.player.left_attack_lock = false},this.player.attackbox.duration)}
+        }
+        if (this.keys.i.pressed === true && this.timeout_control.investigate === false) {
+            this.timeout_control.investigate = setTimeout (() => {
+                this.player.lore_items.forEach(lore_item => {
+                    if (Math.abs(this.player.position.x - lore_item.position.x) <= 100) {
+                        
+                        console.log(`Has encontrado un ${lore_item.text}`)
+                    }
+                
+                    
+                });
+                console.log ('aqui finaliza la busqueda');
+                this.timeout_control.investigate = false;
+                
+            }, 2000)
         }
     }
 }
