@@ -54,8 +54,8 @@ const player = new Player({x: 350, y: 0}, {width: 50, height: 150, color: 'red'}
 const background = new Map({x: 0, y: -2700}, {width: 6400, height: 3600}, context_2D, './Assets/map1.png', 256, 144);
 const controller = new KeyboardController(player);
 //const cultist = new Monster ({x: 1000, y: 0}, {width: 50, height: 150, color: 'purple'}, context_2D, {}, {}, {width: 150, height: 40, attack: false, duration: 1000, damage: 1}, 0.05, map);
-const book = new LoreItem ({x: 750, y: 650}, {width: 66, height: 33, color: 'blue'}, context_2D, {}, {}, 'es un libro o rectangulo azul mas o menos')
-const scepter = new LoreItem ({x: 2800, y: -2650}, {width: 12, height: 80, color: 'red'}, context_2D, {}, {})
+const book = new LoreItem ({x: 750, y: 650}, {width: 66, height: 33, color: 'blue'}, context_2D, {}, {}, 'es un libro o rectangulo azul mas o menos', player)
+const scepter = new LoreItem ({x: 2800, y: -2650}, {width: 12, height: 80, color: 'red'}, context_2D, {}, {}, 'cetro invocacion profundos', player)
 lore.push(book)
 lore.push(scepter)
 //monsters_maps_1.push(cultist);

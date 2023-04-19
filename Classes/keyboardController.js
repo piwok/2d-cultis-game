@@ -52,7 +52,9 @@ class KeyboardController {
             else if (event.key === 'w') {
                 this.keys.w.pressed = false}
             else if (event.key === 'i') {
-                this.keys.i.pressed = false}
+                this.keys.i.pressed = false
+                clearTimeout(this.timeout_control.investigate)
+                this.timeout_control.investigate = false}
             this.last_key = 'sin valor'})}
             
     applyController() {
@@ -96,7 +98,7 @@ class KeyboardController {
             this.timeout_control.investigate = setTimeout (() => {
                 this.player.lore_items.forEach(lore_item => {
                     if (Math.abs(this.player.position.x - lore_item.position.x) <= 100) {
-                        
+                        lore_item.display_text = true
                         console.log(`Has encontrado un ${lore_item.text}`)
                     }
                 
