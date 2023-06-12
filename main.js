@@ -1,6 +1,6 @@
 import Player from './Classes/Player.js'
 import InputHandler from './Classes/InputHandler.js';
-import {drawLastKey, drawStatus} from './utils.js'
+import {drawStatusText} from './utils.js'
 import {states, State} from './Classes/States.js'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,11 +17,10 @@ const input_handler = new InputHandler()
 
 function updateScreen () {
     context_2D.clearRect(0, 0, canvas.width, canvas.height)
-    drawLastKey(context_2D, input_handler)
-    drawStatus(context_2D, player)
+    drawStatusText(context_2D, input_handler, player)
     player.update(input_handler.last_key)
     player.draw(context_2D)
-    player.current_state.handleInput(input_handler.last_key)
+    
 
 
     requestAnimationFrame(updateScreen)

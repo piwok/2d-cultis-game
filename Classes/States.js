@@ -2,7 +2,7 @@ export const states = {
     IdleRight: 0,
     IdleLeft: 1,
     RunRight: 2,
-    RunLeft: 3
+    RunLeft: 3,
 }
 
 export class State {
@@ -90,75 +90,33 @@ export class RunRight extends (State) {
 }
 
 class JumpRight extends (State) {
-    constructor(state_name, vessel, img, frames_number) {
-        super(state_name, vessel)
+    constructor(vessel) {
+        super('JumpRight')
+        this.vessel = vessel
         this.image = new Image()
-        this.image.src = img
-        this.frames_number = frames_number
+        this.image.src = '../Assets/Onre/FlightRight.png'
+        this.frames_number = 3 //tres primeros frames del .png
     }
 
     enterState () {}
 
-    draw () {}
-
     inputHandler () {}
-
-    update () {}
 
     exitState () {}
 }
 
 class JumpLeft extends (State) {
-    constructor(state_name, vessel, img, frames_number) {
-        super(state_name, vessel)
+    constructor(vessel) {
+        super('JumpLeft')
+        this.vessel = vessel
         this.image = new Image()
-        this.image.src = img
-        this.frames_number = frames_number
+        this.image.src = '../Assets/Onre/FlightLeft.png'
+        this.frames_number = 3 //tres primeros frames del .png
     }
 
     enterState () {}
 
-    draw () {}
-
     inputHandler () {}
-
-    update () {}
-
-    exitState () {}
-}
-
-class FallRight extends (State) {
-    constructor(state_name, vessel, img, frames_number) {
-        super(state_name, vessel)
-        this.image = new Image()
-        this.image.src = img
-        this.frames_number = frames_number
-    }
-
-    enterState () {}
-
-    draw () {}
-
-    inputHandler () {}
-
-    update () {}
-
-    exitState () {}
-}
-
-class FallLeft extends (State) {
-    constructor(state_name, vessel, img, frames_number) {
-        super(state_name, vessel)
-        
-    }
-
-    enterState () {}
-
-    draw () {}
-
-    inputHandler () {}
-
-    update () {}
 
     exitState () {}
 }
