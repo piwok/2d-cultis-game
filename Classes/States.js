@@ -27,20 +27,20 @@ export class IdleRight extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
-        this.vessel.speed_x = 0
+        this.vessel.speed.x = 0
         
     }
 
     handleInput (new_input) {
-        if (new_input === 'PRESS o') {
+        if (new_input.leftRightLS <= -0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS p') {
+        else if (new_input.leftRightLS >= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunRight)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS space') {
+        else if (new_input.A_button_pressed === true && this.vessel.isOnGround() === true) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpRight)
             this.vessel.current_state.enterState()}}
@@ -60,21 +60,21 @@ export class IdleLeft extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
-        this.vessel.speed_x = 0
+        this.vessel.speed.x = 0
         
     }
 
     handleInput (new_input) {
-        if (new_input === 'PRESS p') {
+        if (new_input.leftRightLS >= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunRight)
             this.vessel.current_state.enterState()
         }
-        else if (new_input === 'PRESS o') {
+        else if (new_input.leftRightLS <= -0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS space') {
+        else if (new_input.A_button_pressed === true && this.vessel.isOnGround()) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpLeft)
             this.vessel.current_state.enterState()}}
@@ -94,19 +94,19 @@ export class RunLeft extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
-        this.vessel.speed_x = -5
+        this.vessel.speed.x = -5
     }
 
     handleInput (new_input) {
-        if (new_input === 'RELEASE o') {
+        if (new_input.leftRightLS >= -0.5 && new_input.leftRightLS <= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.IdleLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS p') {
+        else if (new_input.leftRightLS >= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunRight)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS space') {
+        else if (new_input.A_button_pressed === true && this.vessel.isOnGround() === true) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpLeft)
             this.vessel.current_state.enterState()}}
@@ -126,20 +126,20 @@ export class RunRight extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
-        this.vessel.speed_x = 5
+        this.vessel.speed.x = 5
     }
 
     handleInput (new_input) {
         
-        if (new_input === 'RELEASE p') {
+        if (new_input.leftRightLS >= -0.5 && new_input.leftRightLS <= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.IdleRight)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS o') {
+        else if (new_input.leftRightLS <= -0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS space') {
+        else if (new_input.A_button_pressed === true && this.vessel.isOnGround() === true) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpRight)
             this.vessel.current_state.enterState()}}
@@ -159,22 +159,23 @@ export class JumpRight extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
+        this.vessel.speed.x = 3.5
         if (this.vessel.isOnGround() === true) {
-            this.vessel.speed_y = -30
+            this.vessel.speed.y = -30
         }
     }
 
     handleInput (new_input) {
         
-        if (new_input === 'RELEASE p') {
+        if (new_input.leftRightLS >= -0.15 && new_input.leftRightLS <= 0.15) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.IdleRight)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS o') {
+        else if (new_input.leftRightLS <= -0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpLeft)
             this.vessel.current_state.enterState()}
-        else if (this.vessel.speed_y >= 0) {
+        else if (this.vessel.speed.y >= 0) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.FallRight)
             this.vessel.current_state.enterState()}
@@ -195,23 +196,24 @@ export class JumpLeft extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
+        this.vessel.speed.x = -3.5
         if (this.vessel.isOnGround() === true) {
-            this.vessel.speed_y = -30
+            this.vessel.speed.y = -30
         }
     }
 
     handleInput (new_input) {
         
 
-        if (new_input === 'RELEASE o') {
+        if (new_input.leftRightLS >= -0.15 && new_input.leftRightLS <= 0.15) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.IdleLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'PRESS p') {
+        else if (new_input.leftRightLS >= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.JumpRight)
             this.vessel.current_state.enterState()}
-        else if (this.vessel.speed_y >= 0) {
+        else if (this.vessel.speed.y >= 0) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.FallLeft)
             this.vessel.current_state.enterState()
@@ -236,11 +238,16 @@ export class FallRight extends (State) {
     }
 
     handleInput (new_input) {
-        
-        if (new_input === 'PRESS o') {
+        if (new_input.leftRightLS <= -0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.FallLeft)
             this.vessel.current_state.enterState()}
+        else if (new_input.leftRightLS >= -0.5 && new_input.leftRightLS <= 0.5) {
+            this.vessel.current_state.exitState()
+            this.vessel.setState(states.IdleRight)
+            this.vessel.current_state.enterState()
+
+        }
         else if (this.vessel.isOnGround()) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.RunRight)
@@ -263,15 +270,16 @@ export class FallLeft extends (State) {
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
+        this.vessel.speed.x = -3.5
     }
 
     handleInput (new_input) {
         
-        if (new_input === 'PRESS p') {
+        if (new_input.leftRightLS >= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.FallRight)
             this.vessel.current_state.enterState()}
-        else if (new_input === 'RELEASE o') {
+        else if (new_input.leftRightLS >= -0.5 && new_input.leftRightLS <= 0.5) {
             this.vessel.current_state.exitState()
             this.vessel.setState(states.IdleLeft)
             this.vessel.current_state.enterState()
