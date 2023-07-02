@@ -1,6 +1,5 @@
 import Player from './Classes/Player.js'
 import {Block} from './Classes/Block.js'
-import InputHandler from './Classes/InputHandler.js';
 import {drawStatusText, detectCollision} from './utils.js'
 import {states, State} from './Classes/States.js'
 import { GamepadHandler } from './Classes/GamepadHandler.js';
@@ -15,8 +14,12 @@ const context_2D = canvas.getContext('2d');
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 const player = new Player(canvas.width, canvas.height)
-const floor_block = new Block({x:0, y: 800}, {width: 1000, height:50}, 'red')
+const floor_block = new Block({x:100, y: 800}, {width: 1000, height:50}, 'red')
+const platform_block = new Block({x:400, y: 550}, {width: 200, height:30}, 'red')
+const wall_block = new Block({x:550, y: 300}, {width: 100, height:500}, 'red')
 player.addBlock(floor_block)
+player.addBlock(platform_block)
+player.addBlock(wall_block)
 const input_handler = new GamepadHandler()
 let last_time = 0
 
@@ -30,6 +33,8 @@ function updateScreen (time_stamp) {
     drawStatusText(context_2D, input_handler, player)
     player.update(input_handler)
     floor_block.draw(context_2D)
+    platform_block.draw(context_2D)
+    wall_block.draw(context_2D)
     player.draw(context_2D, delta_time)
     
 

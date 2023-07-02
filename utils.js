@@ -12,14 +12,16 @@ export function drawStatusText (context_2D, input_handler, vessel) {
         context_2D.fillText(`X button value: ${input_handler.X_button_pressed}`, 25, 400)
         context_2D.fillText(`Y button value: ${input_handler.Y_button_pressed}`, 25, 450)
         context_2D.fillText(`is on ground: ${vessel.isOnGround()}`, 25, 500)
+        context_2D.fillText(`Position: ${vessel.position.x}, ${vessel.position.y}`, 25, 550)
+        context_2D.fillText(`Double Jump Lock: ${vessel.double_jump_lock}`, 25, 600)
         
     }
    
 }
 
 export function detectCollision(object1, object2) {
-    return (object1.position.y + object1.hitbox.height >= object2.y &&
-        object1.position.y <= object2.y + object2.height &&
-        object1.position.x + object1.width >= object2.x &&
-        object1.position.x <= object2.x + object2.width)
+    return (object1.position.y + object1.current_state.hitbox.height >= object2.position.y &&
+        object1.position.y <= object2.position.y + object2.size.height &&
+        object1.position.x + object1.current_state.hitbox.width >= object2.position.x &&
+        object1.position.x <= object2.position.x + object2.size.width)
 }

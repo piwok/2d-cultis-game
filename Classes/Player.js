@@ -1,19 +1,22 @@
-import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, states} from './States.js'
+import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, DoubleJumpRight, DoubleJumpLeft, states} from './States.js'
 import {detectCollision} from '../utils.js'
 
 export default class Player {
     constructor (game_width, game_height) {
         this.game = {width: game_width, height: game_height}
-        this.states = [new IdleRight(this), new IdleLeft(this), new RunRight(this), new RunLeft(this),
-            new JumpRight(this), new JumpLeft(this), new FallRight(this), new FallLeft(this)]
+        this.states = [new IdleRight(this), new IdleLeft(this),
+            new RunRight(this), new RunLeft(this),
+            new JumpRight(this), new JumpLeft(this),
+            new FallRight(this), new FallLeft(this),
+            new DoubleJumpRight(this), new DoubleJumpLeft(this)]
         this.current_state = this.states[0]
         this.crop_frame = {width: 128, height: 128}
         this.position = {x:this.game.width/2 - this.crop_frame.width/2, y: this.crop_frame.height}
-        this.hitbox = {width: 30, height: 70}
         this.current_frame = 0
         this.max_frames = 6
         this.weight = 0.999
         this.speed = {x: 0, y: 0}
+        this.double_jump_lock = false
         this.collision_blocks = []
         this.fps = 30
         this.delta_timer = 0
@@ -21,7 +24,7 @@ export default class Player {
     }
 
     isOnGround() {
-        if (this.speed.y === 0) {return true}
+        if (this.speed.y === 0.000) {return true}
         else {return false}
     }
 
@@ -36,9 +39,9 @@ export default class Player {
             this.delta_timer = 0}
         else {this.delta_timer += delta_time}
         context_2D.fillStyle = 'red'
-        context_2D.fillRect(this.position.x + 47, this.position.y + 57, this.hitbox.width, this.hitbox.height)
-        context_2D.drawImage(this.current_state.image, this.crop_frame.width*this.current_frame, 0,
-        this.crop_frame.width, this.crop_frame.height, this.position.x, this.position.y, this.crop_frame.width, this.crop_frame.height)
+        context_2D.fillRect(this.position.x, this.position.y, this.current_state.hitbox.width, this.current_state.hitbox.height)
+        context_2D.drawImage(this.current_state.image, this.crop_frame.width*this.current_frame + this.current_state.image_offset.x, this.current_state.image_offset.y,
+        this.current_state.hitbox.width, this.current_state.hitbox.height, this.position.x, this.position.y, this.current_state.hitbox.width, this.current_state.hitbox.height)
         
         
     }
@@ -58,13 +61,14 @@ export default class Player {
     detectHorizontalCollisions () {
         this.collision_blocks.forEach((block) => {
             if (detectCollision(this, block)) {
-                if (this.position.x + this.speed.x <= block.x + block.width && this.position.x + this.speed.x + this.hitbox.width > block.x) {
+                if (this.position.x + this.speed.x <= block.position.x + block.size.width && this.position.x + this.speed.x + this.current_state.hitbox.width > block.position.x && this.speed.x < 0) {
                     this.speed.x = 0
-                    this.position.x = block.x + block.width + 0.01
+                    this.position.x = block.position.x + block.size.width + 0.01
                 }
-                else if (this.position.x + this.speed.x +this.hitbox.width >= block.x && this.position.x + this.speed.x < block.x + block.width) {
+                else if (this.position.x + this.speed.x +this.current_state.hitbox.width >= block.position.x && this.position.x + this.speed.x < block.position.x + block.size.width && this.speed.x > 0) {
+                    console.log('weee')
                     this.speed.x = 0
-                    this.position.x = block.x - this.hitbox.width - 0.01
+                    this.position.x = block.position.x - this.current_state.hitbox.width - 0.01
                 }
             }
         })
@@ -73,13 +77,13 @@ export default class Player {
     detectVerticalCollisions () {
         this.collision_blocks.forEach((block) => {
             if (detectCollision(this, block)) {
-                if (this.position.y + this.speed.y + this.hitbox.height >= block.y && this.position.y + this.speed.y < block.y + block.height) {
+                if (this.speed.y > 0 && this.position.y + this.speed.y + this.current_state.hitbox.height >= block.position.y && this.position.y + this.speed.y < block.position.y + block.size.height) {
                     this.speed.y = 0
-                    this.position.y = block.y - this.hitbox.height - 0.01
+                    this.position.y = block.position.y - this.current_state.hitbox.height - 0.01
                 }
-                else if (this.position.y + this.speed.y <= block.y + block.height && this.position.y + this.speed.y + this.hitbox.height > block.y) {
+                else if (this.speed.y < 0 && this.position.y + this.speed.y <= block.position.y + block.size.height && this.position.y + this.speed.y + this.current_state.hitbox.height > block.position.y) {
                     this.speed.y = 0
-                    this.position.y = block.y + block.height + 0.01
+                    this.position.y = block.position.y + block.size.height + 0.01
                 }
             }
         })
