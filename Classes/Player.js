@@ -1,4 +1,5 @@
-import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, DoubleJumpRight, DoubleJumpLeft, states} from './States.js'
+import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, DoubleJumpRight, DoubleJumpLeft, DashRight, DashLeft,
+    AttackRight, AttackLeft, states} from './States.js'
 import {detectCollision} from '../utils.js'
 
 export default class Player {
@@ -8,15 +9,18 @@ export default class Player {
             new RunRight(this), new RunLeft(this),
             new JumpRight(this), new JumpLeft(this),
             new FallRight(this), new FallLeft(this),
-            new DoubleJumpRight(this), new DoubleJumpLeft(this)]
+            new DoubleJumpRight(this), new DoubleJumpLeft(this),
+            new DashRight(this), new DashLeft(this),
+            new AttackRight(this), new AttackLeft(this)]
         this.current_state = this.states[0]
         this.crop_frame = {width: 128, height: 128}
         this.position = {x:this.game.width/2 - this.crop_frame.width/2, y: this.crop_frame.height}
         this.current_frame = 0
         this.max_frames = 6
         this.weight = 0.999
-        this.speed = {x: 0, y: 0}
+        this.speed = {x: 0, y: 0}      
         this.double_jump_lock = false
+        this.double_jump_done = false
         this.collision_blocks = []
         this.fps = 30
         this.delta_timer = 0
@@ -52,7 +56,8 @@ export default class Player {
         this.position.x += this.speed.x
         this.detectHorizontalCollisions()
         //vertical movement
-        this.speed.y += this.weight
+        if (!(this.current_state.state === 'DashRight' || this.current_state.state === 'DashLeft')) {
+            this.speed.y += this.weight}
         this.position.y += this.speed.y
         this.detectVerticalCollisions()
         
@@ -62,12 +67,9 @@ export default class Player {
         this.collision_blocks.forEach((block) => {
             if (detectCollision(this, block)) {
                 if (this.position.x + this.speed.x <= block.position.x + block.size.width && this.position.x + this.speed.x + this.current_state.hitbox.width > block.position.x && this.speed.x < 0) {
-                    this.speed.x = 0
                     this.position.x = block.position.x + block.size.width + 0.01
                 }
                 else if (this.position.x + this.speed.x +this.current_state.hitbox.width >= block.position.x && this.position.x + this.speed.x < block.position.x + block.size.width && this.speed.x > 0) {
-                    console.log('weee')
-                    this.speed.x = 0
                     this.position.x = block.position.x - this.current_state.hitbox.width - 0.01
                 }
             }

@@ -11,6 +11,8 @@ export class GamepadHandler {
         this.B_button_pressed = false
         this.X_button_pressed = false
         this.Y_button_pressed = false
+        this.Right_trigger = false
+        this.Left_trigger = false
     }
 
     updateButtonsStatus () {
@@ -25,6 +27,9 @@ export class GamepadHandler {
             this.B_button_pressed = buttons[1].pressed
             this.X_button_pressed = buttons[2].pressed
             this.Y_button_pressed = buttons[3].pressed
+            this.Left_trigger = buttons[6].pressed
+            this.Right_trigger = buttons[7].pressed
+            
         }
     }
 }

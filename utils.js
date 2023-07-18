@@ -14,6 +14,8 @@ export function drawStatusText (context_2D, input_handler, vessel) {
         context_2D.fillText(`is on ground: ${vessel.isOnGround()}`, 25, 500)
         context_2D.fillText(`Position: ${vessel.position.x}, ${vessel.position.y}`, 25, 550)
         context_2D.fillText(`Double Jump Lock: ${vessel.double_jump_lock}`, 25, 600)
+        context_2D.fillText(`Right trigger button value: ${input_handler.Right_trigger}`, 25, 650)
+        context_2D.fillText(`Left trigger button value: ${input_handler.Left_trigger}`, 25, 700)
         
     }
    
