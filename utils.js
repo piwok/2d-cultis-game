@@ -1,8 +1,9 @@
-export function drawStatusText (context_2D, input_handler, vessel) {
+export function drawStatusText (context_2D, input_handler, vessel, number_frames, total_time) {
     context_2D.font = '25px Helvetica'
     context_2D.fillStyle = 'black'
     context_2D.fillText('State is: ' + vessel.current_state.state, 25, 50)
     if (input_handler.pad_index != null) {
+        context_2D.fillText(`FPS: ${Math.round(number_frames/(total_time/1000))}`, 900, 50)
         context_2D.fillText(`Left Stick leftright value: ${input_handler.leftRightLS}`, 25, 100)
         context_2D.fillText(`Left Stick updown value: ${input_handler.upDownLS}`, 25, 150)
         context_2D.fillText(`Right Stick leftright value: ${input_handler.leftRightRS}`, 25, 200)
@@ -16,6 +17,7 @@ export function drawStatusText (context_2D, input_handler, vessel) {
         context_2D.fillText(`Double Jump Lock: ${vessel.double_jump_lock}`, 25, 600)
         context_2D.fillText(`Right trigger button value: ${input_handler.Right_trigger}`, 25, 650)
         context_2D.fillText(`Left trigger button value: ${input_handler.Left_trigger}`, 25, 700)
+        context_2D.fillText(`Dash done: ${vessel.dash_done}`, 25, 750)
         
     }
    

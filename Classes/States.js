@@ -11,8 +11,8 @@ export const states = {
     DoubleJumpLeft: 9,
     DashRight: 10,
     DashLeft: 11,
-    AttackRight: 12,
-    AttackLeft: 13
+    AttackRight1: 12,
+    AttackLeft1: 13
 }
 
 export class State {
@@ -34,7 +34,9 @@ export class IdleRight extends (State) {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
         this.vessel.speed.x = 0
-        this.vessel.double_jump_lock = false}
+        this.vessel.double_jump_lock = false
+        this.vessel.double_jump_done = false
+        this.vessel.dash_done = false}
 
     handleInput (new_input) {
         if (new_input.leftRightLS <= -0.15 && this.vessel.isOnGround()) {
@@ -62,7 +64,9 @@ export class IdleLeft extends (State) {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
         this.vessel.speed.x = 0
-        this.vessel.double_jump_lock = false}
+        this.vessel.double_jump_lock = false
+        this.vessel.double_jump_done = false
+        this.vessel.dash_done = false}
 
     handleInput (new_input) {
         if (new_input.leftRightLS >= 0.15 && this.vessel.isOnGround()) {
@@ -91,7 +95,8 @@ export class RunRight extends (State) {
         this.vessel.current_frame = 0
         this.vessel.speed.x = 5
         this.vessel.double_jump_lock = false
-        this.vessel.double_jump_done = false}
+        this.vessel.double_jump_done = false
+        this.vessel.dash_done = false}
 
     handleInput (new_input) {
         if (new_input.leftRightLS >= -0.15 && new_input.leftRightLS <= 0.15) {
@@ -123,7 +128,8 @@ export class RunLeft extends (State) {
         this.vessel.current_frame = 0
         this.vessel.speed.x = -5
         this.vessel.double_jump_lock = false
-        this.vessel.double_jump_done = false}
+        this.vessel.double_jump_done = false
+        this.vessel.dash_done = false}
 
     handleInput (new_input) {
         if (new_input.leftRightLS >= -0.15 && new_input.leftRightLS <= 0.15) {
@@ -165,7 +171,7 @@ export class JumpRight extends (State) {
         if (new_input.leftRightLS <= -0.15) {
             this.vessel.setState(states.JumpLeft)
             this.vessel.current_state.enterState()}
-        else if (new_input.Right_trigger === true) {
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
             this.vessel.setState(states.DashRight)
             this.vessel.current_state.enterState()}
         else if (this.vessel.speed.y >= 0) {
@@ -202,7 +208,7 @@ export class JumpLeft extends (State) {
         if (new_input.leftRightLS >= 0.15) {
             this.vessel.setState(states.JumpRight)
             this.vessel.current_state.enterState()}
-        else if (new_input.Right_trigger === true) {
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
             this.vessel.setState(states.DashLeft)
             this.vessel.current_state.enterState()}
         else if (this.vessel.speed.y >= 0) {
@@ -238,7 +244,10 @@ export class FallRight extends (State) {
         else if (this.vessel.isOnGround()) {
             this.vessel.setState(states.RunRight)
             this.vessel.current_state.enterState()}
-        else if (new_input.A_button_pressed === false && this.vessel.isOnGround() === false && this.vessel.double_jump_lock === false) {
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
+            this.vessel.setState(states.DashRight)
+            this.vessel.current_state.enterState()}
+        else if (new_input.A_button_pressed === false && !this.vessel.isOnGround() && this.vessel.double_jump_lock === false) {
             this.vessel.double_jump_lock = true}
         else if (new_input.A_button_pressed === true && this.vessel.double_jump_lock === true && !this.vessel.isOnGround()) {
             this.vessel.setState(states.DoubleJumpRight)
@@ -268,9 +277,12 @@ export class FallLeft extends (State) {
         else if (this.vessel.isOnGround()) {
             this.vessel.setState(states.RunLeft)
             this.vessel.current_state.enterState()}
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
+            this.vessel.setState(states.DashLeft)
+            this.vessel.current_state.enterState()}
         else if (new_input.A_button_pressed === false && !this.vessel.isOnGround() && this.vessel.double_jump_lock === false) {
             this.vessel.double_jump_lock = true}
-        else if (new_input.A_button_pressed === true && this.vessel.double_jump_lock === true) {
+        else if (new_input.A_button_pressed === true && this.vessel.double_jump_lock === true && !this.vessel.isOnGround()) {
             this.vessel.setState(states.DoubleJumpLeft)
             this.vessel.current_state.enterState()}}
 }
@@ -300,6 +312,9 @@ export class DoubleJumpRight extends (State) {
             this.vessel.current_state.enterState()}
         else if (new_input.leftRightLS >= 0.15 && this.vessel.isOnGround()) {
             this.vessel.setState(states.RunRight)
+            this.vessel.current_state.enterState()}
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
+            this.vessel.setState(states.DashRight)
             this.vessel.current_state.enterState()}
         else if (this.vessel.speed.y >= 0) {
             this.vessel.setState(states.FallLeft)
@@ -333,6 +348,9 @@ export class DoubleJumpLeft extends (State) {
         else if (new_input.leftRightLS <= -0.15 && this.vessel.isOnGround()) {
             this.vessel.setState(states.RunLeft)
             this.vessel.current_state.enterState()}
+        else if (new_input.Right_trigger === true && this.vessel.dash_done === false) {
+            this.vessel.setState(states.DashLeft)
+            this.vessel.current_state.enterState()}
         else if (this.vessel.speed.y >= 0) {
             this.vessel.setState(states.FallLeft)
             this.vessel.current_state.enterState()}}
@@ -346,19 +364,23 @@ export class DashRight extends (State) {
         this.image.src = '../Assets/Onre/FlightRight.png'
         this.frames_number = 6
         this.image_offset = {x: 26, y: 59}
-        this.hitbox = {width: 70, height: 30}}
+        this.hitbox = {width: 70, height: 30}
+        this.timer = false}
 
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
         this.vessel.speed.x = 7
         this.vessel.speed.y = 0
-        setTimeout(() => {this.vessel.setState(states.IdleRight)
-                        this.vessel.current_state.enterState()}, 1000)}
+        if (this.vessel.dash_done === false) {
+            this.timer = setTimeout(() => {this.vessel.setState(states.FallLeft)
+                        this.vessel.current_state.enterState()}, 1000)
+            this.vessel.dash_done = true}}
 
     handleInput (new_input) {
         if (new_input.Right_trigger === false) {
-            this.vessel.setState(states.IdleRight)
+            clearTimeout(this.timer)
+            this.vessel.setState(states.FallRight)
             this.vessel.current_state.enterState()}
         }
 
@@ -371,26 +393,49 @@ export class DashLeft extends (State) {
         this.image.src = '../Assets/Onre/FlightLeft.png'
         this.frames_number = 6
         this.image_offset = {x: 26, y: 59}
-        this.hitbox = {width: 70, height: 30}}
+        this.hitbox = {width: 70, height: 30}
+        this.timer = false}
 
     enterState () {
         this.vessel.max_frames = this.frames_number
         this.vessel.current_frame = 0
         this.vessel.speed.x = -7
         this.vessel.speed.y = 0
-        setTimeout(() => {this.vessel.setState(states.IdleLeft)
-                        this.vessel.current_state.enterState()}, 1000)}
+        if (this.vessel.dash_done === false) {
+            this.timer = setTimeout(() => {this.vessel.setState(states.FallRight)
+                        this.vessel.current_state.enterState()}, 1000)
+            this.vessel.dash_done = true}}
 
     handleInput (new_input) {
         if (new_input.Right_trigger === false) {
-            this.vessel.setState(states.IdleLeft)
+            clearTimeout(this.timer)
+            this.vessel.setState(states.FallLeft)
             this.vessel.current_state.enterState()}
         }
 
 }
-export class AttackRight extends (State) {
+export class AttackRight1 extends (State) {
+    constructor(vessel) {
+        super('AttackRight1')
+        this.vessel = vessel
+        this.image = new Image()
+        this.image.src = '../Assets/Onre/AttackRight1.png'
+        this.frames_number = 5
+        this.image_offset = {x: 26, y: 59}
+        this.hitbox = {width: 70, height: 30}
+        this.timer = false}
+
+    enterState () {
+        this.vessel.max_frames = this.frames_number
+        this.vessel.current_frame = 0
+        this.vessel.speed.x = -7
+        this.vessel.speed.y = 0
+        if (this.vessel.dash_done === false) {
+            this.timer = setTimeout(() => {this.vessel.setState(states.FallRight)
+                        this.vessel.current_state.enterState()}, 1000)
+            this.vessel.dash_done = true}}
 
 }
-export class AttackLeft extends (State) {
+export class AttackLeft1 extends (State) {
 
 }

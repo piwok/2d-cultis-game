@@ -22,15 +22,20 @@ player.addBlock(platform_block)
 player.addBlock(wall_block)
 const input_handler = new GamepadHandler()
 let last_time = 0
+let number_frames = 0
+let total_time = 0
 
 function updateScreen (time_stamp) {
+    console.log(time_stamp)
     const delta_time = time_stamp - last_time
+    total_time += delta_time
+    number_frames += 1
     last_time = time_stamp
     context_2D.clearRect(0, 0, canvas.width, canvas.height)
     context_2D.fillStyle = 'blue'
     context_2D.fill()
     input_handler.updateButtonsStatus()
-    drawStatusText(context_2D, input_handler, player)
+    drawStatusText(context_2D, input_handler, player, number_frames, total_time)
     player.update(input_handler)
     floor_block.draw(context_2D)
     platform_block.draw(context_2D)

@@ -1,5 +1,5 @@
 import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, DoubleJumpRight, DoubleJumpLeft, DashRight, DashLeft,
-    AttackRight, AttackLeft, states} from './States.js'
+    AttackRight1, AttackLeft1, states} from './States.js'
 import {detectCollision} from '../utils.js'
 
 export default class Player {
@@ -11,7 +11,7 @@ export default class Player {
             new FallRight(this), new FallLeft(this),
             new DoubleJumpRight(this), new DoubleJumpLeft(this),
             new DashRight(this), new DashLeft(this),
-            new AttackRight(this), new AttackLeft(this)]
+            new AttackRight1(this), new AttackLeft1(this)]
         this.current_state = this.states[0]
         this.crop_frame = {width: 128, height: 128}
         this.position = {x:this.game.width/2 - this.crop_frame.width/2, y: this.crop_frame.height}
@@ -21,6 +21,7 @@ export default class Player {
         this.speed = {x: 0, y: 0}      
         this.double_jump_lock = false
         this.double_jump_done = false
+        this.dash_done = false
         this.collision_blocks = []
         this.fps = 30
         this.delta_timer = 0
@@ -28,7 +29,7 @@ export default class Player {
     }
 
     isOnGround() {
-        if (this.speed.y === 0.000) {return true}
+        if (this.speed.y === 0.000 && !(this.current_state.state === 'DashRight') && !(this.current_state.state === 'DashLeft')) {return true}
         else {return false}
     }
 
