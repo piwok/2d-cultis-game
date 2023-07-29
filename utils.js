@@ -1,9 +1,10 @@
-export function drawStatusText (context_2D, input_handler, vessel, number_frames, total_time) {
+export function drawStatusText (context_2D, input_handler, vessel, projectile_vessel, number_frames, total_time) {
     context_2D.font = '25px Helvetica'
     context_2D.fillStyle = 'black'
     context_2D.fillText('State is: ' + vessel.current_state.state, 25, 50)
+    context_2D.fillText(`FPS: ${Math.round(number_frames/(total_time/1000))}`, 900, 50)
+    context_2D.fillText(`projectile state: ${projectile_vessel.current_state.state}`, 900, 100)
     if (input_handler.pad_index != null) {
-        context_2D.fillText(`FPS: ${Math.round(number_frames/(total_time/1000))}`, 900, 50)
         context_2D.fillText(`Left Stick leftright value: ${input_handler.leftRightLS}`, 25, 100)
         context_2D.fillText(`Left Stick updown value: ${input_handler.upDownLS}`, 25, 150)
         context_2D.fillText(`Right Stick leftright value: ${input_handler.leftRightRS}`, 25, 200)

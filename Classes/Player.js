@@ -15,13 +15,16 @@ export default class Player {
         this.current_state = this.states[0]
         this.crop_frame = {width: 128, height: 128}
         this.position = {x:this.game.width/2 - this.crop_frame.width/2, y: this.crop_frame.height}
+        this.is_on_ground = false
         this.current_frame = 0
         this.max_frames = 6
         this.weight = 0.999
-        this.speed = {x: 0, y: 0}      
+        this.speed = {x: 0, y: 0}
+        this.attack = false    
         this.double_jump_lock = false
         this.double_jump_done = false
         this.dash_done = false
+        this.dash_timer = false
         this.collision_blocks = []
         this.fps = 30
         this.delta_timer = 0
@@ -31,6 +34,13 @@ export default class Player {
     isOnGround() {
         if (this.speed.y === 0.000 && !(this.current_state.state === 'DashRight') && !(this.current_state.state === 'DashLeft')) {return true}
         else {return false}
+    }
+
+    dashCooldown() {
+        if (this.dash_timer === false) {
+        this.dash_timer = setTimeout(() => {
+            this.dash_done = false
+            this.dash_timer = false},1000)}
     }
 
     addBlock(new_block) {
@@ -45,6 +55,10 @@ export default class Player {
         else {this.delta_timer += delta_time}
         context_2D.fillStyle = 'red'
         context_2D.fillRect(this.position.x, this.position.y, this.current_state.hitbox.width, this.current_state.hitbox.height)
+        if (this.attack === true) {
+            context_2D.fillStyle = 'yellow'
+            context_2D.fillRect(this.position.x + this.current_state.hitbox.width, this.position.y + 25, this.current_state.attackbox.width, this.current_state.attackbox.height)
+        }
         context_2D.drawImage(this.current_state.image, this.crop_frame.width*this.current_frame + this.current_state.image_offset.x, this.current_state.image_offset.y,
         this.current_state.hitbox.width, this.current_state.hitbox.height, this.position.x, this.position.y, this.current_state.hitbox.width, this.current_state.hitbox.height)
         
@@ -60,9 +74,7 @@ export default class Player {
         if (!(this.current_state.state === 'DashRight' || this.current_state.state === 'DashLeft')) {
             this.speed.y += this.weight}
         this.position.y += this.speed.y
-        this.detectVerticalCollisions()
-        
-        }
+        this.detectVerticalCollisions()}
     
     detectHorizontalCollisions () {
         this.collision_blocks.forEach((block) => {
@@ -78,18 +90,24 @@ export default class Player {
     }
 
     detectVerticalCollisions () {
+        let ground_collision = false
         this.collision_blocks.forEach((block) => {
             if (detectCollision(this, block)) {
                 if (this.speed.y > 0 && this.position.y + this.speed.y + this.current_state.hitbox.height >= block.position.y && this.position.y + this.speed.y < block.position.y + block.size.height) {
                     this.speed.y = 0
                     this.position.y = block.position.y - this.current_state.hitbox.height - 0.01
+                    this.is_on_ground = true
+                    ground_collision = true
                 }
                 else if (this.speed.y < 0 && this.position.y + this.speed.y <= block.position.y + block.size.height && this.position.y + this.speed.y + this.current_state.hitbox.height > block.position.y) {
+                    
                     this.speed.y = 0
                     this.position.y = block.position.y + block.size.height + 0.01
+                    
                 }
             }
         })
+        if (ground_collision === false) {this.is_on_ground = false}
     }
         
 
