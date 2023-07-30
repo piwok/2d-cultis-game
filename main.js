@@ -3,7 +3,9 @@ import Projectile from './Classes/Projectile.js'
 import {Block} from './Classes/Block.js'
 import {drawStatusText, detectCollision} from './utils.js'
 import {states, State} from './Classes/States.js'
-import { GamepadHandler } from './Classes/GamepadHandler.js';
+import {GamepadHandler} from './Classes/GamepadHandler.js'
+import {ObjectPool} from './Classes/ObjectPool.js'
+
 
 
 
@@ -16,6 +18,7 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 const player = new Player(canvas.width, canvas.height)
 const test_projectile = new Projectile(canvas.width, canvas.height)
+const object_pool = new ObjectPool()
 const floor_block = new Block({x:100, y: 800}, {width: 1000, height:50}, 'red')
 const platform_block = new Block({x:400, y: 550}, {width: 200, height:30}, 'red')
 const wall_block = new Block({x:550, y: 300}, {width: 100, height:500}, 'red')

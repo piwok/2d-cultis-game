@@ -7,7 +7,7 @@ export default class Projectile {
         this.states = [new Pool(this), new FlyingRight(this), new FlyingLeft(this)]
         this.current_state = this.states[1]
         this.position = {x: 0, y: this.game.height/2}
-        this.freeze = true
+        this.in_game = true
         this.current_frame = 0
         this.max_frames = 6
         this.weight = 0
@@ -22,7 +22,7 @@ export default class Projectile {
         this.collision_blocks.push(new_block)}
 
     draw (context_2D, delta_time) {
-        if (!this.freeze) {
+        if (this.in_game) {
         context_2D.fillStyle = 'yellow'
         context_2D.fillRect(this.position.x, this.position.y, this.current_state.hitbox.width, this.current_state.hitbox.height)}
     }

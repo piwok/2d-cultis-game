@@ -1,5 +1,5 @@
 import {State, IdleRight, IdleLeft, RunRight, RunLeft, JumpRight, JumpLeft, FallRight, FallLeft, DoubleJumpRight, DoubleJumpLeft, DashRight, DashLeft,
-    AttackRight1, AttackLeft1, states} from './States.js'
+    AttackRight1, AttackLeft1, AttackRight2, AttackLeft2, states} from './States.js'
 import {detectCollision} from '../utils.js'
 
 export default class Player {
@@ -11,7 +11,8 @@ export default class Player {
             new FallRight(this), new FallLeft(this),
             new DoubleJumpRight(this), new DoubleJumpLeft(this),
             new DashRight(this), new DashLeft(this),
-            new AttackRight1(this), new AttackLeft1(this)]
+            new AttackRight1(this), new AttackLeft1(this),
+            new AttackRight2(this), new AttackLeft2(this)]
         this.current_state = this.states[0]
         this.crop_frame = {width: 128, height: 128}
         this.position = {x:this.game.width/2 - this.crop_frame.width/2, y: this.crop_frame.height}
